@@ -1,0 +1,120 @@
+---
+
+imagesets:
+    default-wheel:
+        - ci/linux-2.7:x86_64
+        - ci/linux-2.7:i686
+        - ci/linux-3.4:x86_64
+        - ci/linux-3.4:i686
+        - ci/linux-3.5:x86_64
+        - ci/linux-3.5:i686
+        - ci/linux-3.6:x86_64
+        - ci/linux-3.6:i686
+        - ci/osx-2.7
+        - ci/osx-3.4
+        - ci/osx-3.5
+        - ci/osx-3.6
+
+images:
+    ci/linux-2.7:x86_64:
+        image: manylinux1:x86_64
+        pkgtool: yum
+        buildpy: /opt/wheelenv/bin/python
+        pythons:
+            - /opt/python/cp27-cp27m/bin/python
+            - /opt/python/cp27-cp27mu/bin/python
+        plat_name: manylinux1_x86_64
+        force_plat: false
+        use_auditwheel: true
+    ci/linux-2.7:i686:
+        image: manylinux1:i686
+        pkgtool: yum
+        buildpy: /opt/wheelenv/bin/python
+        pythons:
+            - /opt/python/cp27-cp27m/bin/python
+            - /opt/python/cp27-cp27mu/bin/python
+        plat_name: manylinux1_i686
+        force_plat: false
+        use_auditwheel: true
+    ci/linux-3.4:x86_64:
+        image: manylinux1:x86_64
+        pkgtool: yum
+        buildpy: /opt/wheelenv/bin/python
+        pythons:
+            - /opt/python/cp34-cp34m/bin/python
+        plat_name: manylinux1_x86_64
+        force_plat: false
+        use_auditwheel: true
+    ci/linux-3.4:i686:
+        image: manylinux1:i686
+        pkgtool: yum
+        buildpy: /opt/wheelenv/bin/python
+        pythons:
+            - /opt/python/cp34-cp34m/bin/python
+        plat_name: manylinux1_i686
+        force_plat: false
+        use_auditwheel: true
+    ci/linux-3.5:x86_64:
+        image: manylinux1:x86_64
+        pkgtool: yum
+        buildpy: /opt/wheelenv/bin/python
+        pythons:
+            - /opt/python/cp35-cp35m/bin/python
+        plat_name: manylinux1_x86_64
+        force_plat: false
+        use_auditwheel: true
+    ci/linux-3.5:i686:
+        image: manylinux1:i686
+        pkgtool: yum
+        buildpy: /opt/wheelenv/bin/python
+        pythons:
+            - /opt/python/cp35-cp35m/bin/python
+        plat_name: manylinux1_i686
+        force_plat: false
+        use_auditwheel: true
+    ci/linux-3.6:x86_64:
+        image: manylinux1:x86_64
+        pkgtool: yum
+        buildpy: /opt/wheelenv/bin/python
+        pythons:
+            - /opt/python/cp36-cp36m/bin/python
+        plat_name: manylinux1_x86_64
+        force_plat: false
+        use_auditwheel: true
+    ci/linux-3.6:i686:
+        image: manylinux1:i686
+        pkgtool: yum
+        buildpy: /opt/wheelenv/bin/python
+        pythons:
+            - /opt/python/cp36-cp36m/bin/python
+        plat_name: manylinux1_i686
+        force_plat: false
+        use_auditwheel: true
+    ci/osx-2.7:
+        pkgtool: brew
+        buildpy: ~/venv/bin/python
+        pythons:
+            - python  # from $PATH = buildpy
+        plat_name: macosx_10_6_intel
+        use_delocate: true
+    ci/osx-3.4:
+        pkgtool: brew
+        buildpy: ~/venv/bin/python
+        pythons:
+            - python  # from $PATH = buildpy
+        plat_name: macosx_10_6_intel
+        use_delocate: true
+    ci/osx-3.5:
+        pkgtool: brew
+        buildpy: ~/venv/bin/python
+        pythons:
+            - python  # from $PATH = buildpy
+        plat_name: macosx_10_6_intel
+        use_delocate: true
+    ci/osx-3.6:
+        pkgtool: brew
+        buildpy: ~/venv/bin/python
+        pythons:
+            - python  # from $PATH = buildpy
+        plat_name: macosx_10_6_intel
+        use_delocate: true
