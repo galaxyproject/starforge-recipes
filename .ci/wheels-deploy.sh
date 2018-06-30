@@ -3,9 +3,10 @@ set -e
 #set -xv
 
 openssl aes-256-cbc -K $encrypted_632cb16dd578_key -iv $encrypted_632cb16dd578_iv -in .ci/starforge-depot.key.enc -out .ci/starforge-depot.key -d
-echo 'orval.galaxyproject.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEArcGNXg3ytzMa4N1ML82KPmeR2Ft31Dc2ZoDgAo7YiCf/aeaCYxEDW+d/Iwt97hMXbo8wHpWcVIIwqLTZ9IXDHmgCZ65gbrEvj8SYCiaOZTZB2idKi4p2IyWCK6whyIxXOKXLuQI/izFZMdPcYqSz6fbC82o5yvo5Ql9ja0qYGfXF4jrkKD9gmLJlOS9HZXpZsidd5Tx43aioAh+Gb2btQ87cHOCdv8fGssJRkrskmG/gXhvKEpgExkEtUJavNBCj4rkzPGbz8GL54vpevsyG9lXvcdwkGC9AAC++6Van24klrze1MeguD3XB9xRGb2W6vdDUBSNtmWHKnl9QDjzvxw==' >> $HOME/.ssh/known_hosts
+echo 'wheels.galaxyproject.org ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCXELLgds0rObMT25AWrUFBCx6W6Z5j/wTlT54ke/grCo6RaQ9gLc5GHrJnApKpqVzyNbCIdhz/50QpzVr6EsKSITfadkoDfmmgISq6i2R+OpVgjrBvNWrUtNy6qcZqvgReOyc7yZGlhhZFU8KMTGb2Qajo3TNYiSo9Sbt96HHQIAni1xcocI1Wqw6v/wKlg+2qQgO5g56XzVeZ4yS7zTlKgLexm1GIG3CNI42lndQJJ2pVD/TJ4CDC3CV2HRv5wpJ8Y/T5/7iZr0H/5lvVd5S8wxAx5xrJr1UOIQ/76fjymq5L0kK9FpsX3vjHAOvVkwykGm2I/P4YXB6I+nuJCYtP' >> $HOME/.ssh/known_hosts
+echo 'wheels.galaxyproject.org ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPTnO0DR+VKfErJfN20IY6rjHbbismna9z6SQLEYzbQwpc20fQ06qmMsGJpLD4stBB2zQibTmKRd00QNWAfdILY=' >> $HOME/.ssh/known_hosts
+echo 'wheels.galaxyproject.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAxM4arE1L41qQ88XDNIxiAVnHeF3S2qloeTUe3AmI85' >> $HOME/.ssh/known_hosts
 eval "$(ssh-agent -s)"
 chmod 600 .ci/starforge-depot.key
 ssh-add .ci/starforge-depot.key
-ssh starforge@orval.galaxyproject.org mkdir -p /srv/nginx/depot.galaxyproject.org/root/starforge/travis/build-${TRAVIS_BUILD_NUMBER}
-scp -p *.whl starforge@orval.galaxyproject.org:/srv/nginx/depot.galaxyproject.org/root/starforge/travis/build-${TRAVIS_BUILD_NUMBER}
+scp -p *.whl wheels@wheels.galaxyproject.org:/srv/nginx/wheels.galaxyproject.org/packages
