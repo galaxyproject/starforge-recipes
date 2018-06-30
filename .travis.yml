@@ -13,8 +13,23 @@ env:
 before_install:
   - ./.ci/wheels.sh
 install:
-  - "[ -f __wheels.txt ] && ./.ci/wheels-install.sh"
+  - |
+    if [ -f __wheels.txt ]; then
+        ./.ci/wheels-install.sh
+    else
+        echo "install: nothing to do"
+    fi
 script:
-  - "[ -f __wheels.txt ] && ./.ci/wheels-build.sh"
+  - |
+    if [ -f __wheels.txt ]; then
+        ./.ci/wheels-build.sh
+    else
+        echo "build: nothing to do"
+    fi
 after_success:
-  - '[ -f __wheels.txt -a "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" == "master" -a -n "$encrypted_632cb16dd578_key" ] && ./.ci/wheels-deploy.sh'
+  - |
+    if [ -f __wheels.txt -a "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" == "master" -a -n "$encrypted_632cb16dd578_key" ]; then
+        ./.ci/wheels-deploy.sh
+    else
+        echo "deploy: nothing to do"
+    fi
