@@ -16,5 +16,5 @@ install:
   - "[ -f __wheels.txt ] && ./.ci/wheels-install.sh"
 script:
   - "[ -f __wheels.txt ] && ./.ci/wheels-build.sh"
-deploy:
+after_success:
   - '[ -f __wheels.txt -a "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" == "master" -a -n "$encrypted_632cb16dd578_key" ] && ./.ci/wheels-deploy.sh'
