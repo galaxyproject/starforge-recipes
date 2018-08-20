@@ -1,36 +1,99 @@
 sudo: required
 services:
   - docker
+
 os:
   - linux
   - osx
+
 language: minimal
+
 env:
-  - PY="2.7"
-  - PY="3.4"
-  - PY="3.5"
-  - PY="3.6"
-  - PY="3.7"
+  global:
+    - STARFORGE="git+https://github.com/natefoo/starforge.git@py3-wheels#egg=starforge"
+    - STARFORGE_CMD="starforge --config-file=starforge.yml"
+    - WHEEL_BUILDER_TYPE="c-extension"
+    - WHEEL_METAS=()
+    - BUILD_WHEEL_METAS=()
+  matrix:
+    - PY="2.7"
+    - PY="3.4"
+    - PY="3.5"
+    - PY="3.6"
+    - PY="3.7"
+
+matrix:
+  include:
+    - name: "Universal Pure Python Wheels"
+      os: linux
+      language: python
+      python: "3.6"
+      env:
+        - WHEEL_BUILDER_TYPE="universal"
+        - PY="3.6"
+      install: &purepy_install
+        - pip install $STARFORGE
+      script: &purepy_script
+        - |
+          for meta in "${BUILD_WHEEL_METAS[@]}"; do
+              _f=${meta#wheels/} ; wheel=${_f%%/*}
+              $STARFORGE_CMD --debug wheel --wheels-config="$meta" --image="ci/linux-${PY}:${WHEEL_BUILDER_TYPE}" "$wheel"
+              $STARFORGE_CMD --debug test_wheel --wheels-config="$meta" --image="ci/linux-${PY}:${WHEEL_BUILDER_TYPE}" "$wheel"
+          done
+
+    - name: "Pure Python 2 Wheels"
+      os: linux
+      language: python
+      python: "2.7"
+      env:
+        - WHEEL_BUILDER_TYPE="purepy"
+        - PY="2.7"
+      install: *purepy_install
+      script: *purepy_script
+
+    - name: "Pure Python 3 Wheels"
+      os: linux
+      language: python
+      python: "3.6"
+      env:
+        - WHEEL_BUILDER_TYPE="purepy"
+        - PY="3.6"
+      install: *purepy_install
+      script: *purepy_script
+
 before_install:
-  - ./.ci/wheels.sh
+  #- ./.ci/wheels.sh
+  # sets $WHEELS
+  - eval $(./.ci/wheels.sh)
+  - set | grep '^WHEEL_METAS='
+  - "[ ${#WHEEL_METAS[@]} -gt 0 ] || { echo 'No wheel changes, terminating'; travis_terminate 0; }"
 install:
+  - ./.ci/wheels-install.sh
+before_script:
+  - BUILD_WHEEL_METAS=()
   - |
-    if [ -f __wheels.txt ]; then
-        ./.ci/wheels-install.sh
-    else
-        echo "install: nothing to do"
-    fi
-script:
-  - |
-    if [ -f __wheels.txt ]; then
-        ./.ci/wheels-build.sh
-    else
-        echo "build: nothing to do"
-    fi
-after_success:
-  - |
-    if [ -f __wheels.txt -a "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" == "master" -a -n "$encrypted_632cb16dd578_key" ]; then
-        ./.ci/wheels-deploy.sh
-    else
-        echo "deploy: nothing to do"
-    fi
+    for meta in "${WHEEL_METAS[@]}"; do
+        _f=${meta#wheels/} ; wheel=${_f%%/*}
+        wheel_type=$($STARFORGE_CMD wheel_type --wheels-config="$meta" "$wheel")
+        if [ "$wheel_type" == "$WHEEL_BUILDER_TYPE" ]; then
+            BUILD_WHEEL_METAS+=("$meta")
+        else
+            echo "Builder for '$WHEEL_BUILDER_TYPE' skipping wheel '$wheel' of type '$wheel_type'"
+        fi
+    done
+  - set | grep '^BUILD_WHEEL_METAS='
+  - "[ ${#BUILD_WHEEL_METAS[@]} -gt 0 ] || { echo \"No wheel changes for builder '$WHEEL_BUILDER_TYPE', terminating\"; travis_terminate 0; }"
+#script:
+#  - |
+#    if [ -f __wheels.txt ]; then
+#        ./.ci/wheels-build.sh
+#    else
+#        echo "build: nothing to do"
+#    fi
+#after_success:
+#  - |
+#    if [ -f __wheels.txt -a "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" == "master" -a -n "$encrypted_632cb16dd578_key" ]; then
+#        ./.ci/wheels-deploy.sh
+#    else
+#        echo "deploy: nothing to do"
+#    fi

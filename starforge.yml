@@ -1,6 +1,11 @@
 ---
 
 imagesets:
+    universal-wheel:
+        - ci/linux-3.6:universal
+    purepy-wheel:
+        - ci/linux-2.7:purepy
+        - ci/linux-3.6:purepy
     default-wheel:
         - ci/linux-2.7:x86_64
         - ci/linux-2.7:i686
@@ -19,6 +24,27 @@ imagesets:
         - ci/osx-3.7
 
 images:
+    ci/linux-3.6:universal:
+        type: local
+        pkgtool: yum
+        pythons:
+            - python  # from $PATH = buildpy
+        plat_name: any
+        force_plat: false
+    ci/linux-2.7:purepy:
+        type: local
+        pkgtool: yum
+        pythons:
+            - python  # from $PATH = buildpy
+        plat_name: any
+        force_plat: false
+    ci/linux-3.6:purepy:
+        type: local
+        pkgtool: yum
+        pythons:
+            - python  # from $PATH = buildpy
+        plat_name: any
+        force_plat: false
     ci/linux-2.7:x86_64:
         image: manylinux1:x86_64
         pkgtool: yum
