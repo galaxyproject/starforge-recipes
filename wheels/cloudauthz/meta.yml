@@ -1,0 +1,8 @@
+---
+
+type: wheel
+name: cloudauthz
+purepy: true
+version: 0.1.0
+src:
+    - https://files.pythonhosted.org/packages/ac/44/20d0e6865db1fafc6d3f0fd2ee767d42e287914be5e4d20649a22d1494b6/cloudauthz-0.1.0.tar.gz
