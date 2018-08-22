@@ -19,7 +19,10 @@ case $TRAVIS_OS_NAME in
                 pypt=4
                 ;;
             3.6)
-                pypt=5
+                pypt=6
+                ;;
+            3.7)
+                pypt=0
                 ;;
         esac
         sudo ln -s /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer /Developer
