@@ -1,7 +1,7 @@
 ---
 
-type: wheel
 name: python-lzo
+type: wheel
 purepy: false
 version: 1.12
 src:
