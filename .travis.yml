@@ -10,6 +10,7 @@ env:
   - PY="3.4"
   - PY="3.5"
   - PY="3.6"
+  - PY="3.7"
 before_install:
   - ./.ci/wheels.sh
 install:
