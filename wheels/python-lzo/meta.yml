@@ -1,9 +1,9 @@
 ---
 
 name: python-lzo
+version: 1.12
 type: wheel
 purepy: false
-version: 1.12
 src:
     - http://www.oberhumer.com/opensource/lzo/download/lzo-2.10.tar.gz
 insert_setuptools: true
