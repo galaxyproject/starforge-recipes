@@ -4,6 +4,8 @@ set -e
 
 echo "Detecting changes to wheels/..."
 
+echo "\$TRAVIS_COMMIT_RANGE is $TRAVIS_COMMIT_RANGE"
+
 if ! git diff --quiet $TRAVIS_COMMIT_RANGE -- 2>/dev/null; then
     git remote set-branches --add origin master
     git fetch
