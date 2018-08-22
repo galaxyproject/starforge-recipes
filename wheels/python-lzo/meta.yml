@@ -5,8 +5,8 @@ version: 1.12
 type: wheel
 purepy: false
 src:
-    - http://www.oberhumer.com/opensource/lzo/download/lzo-2.10.tar.gz
+  - http://www.oberhumer.com/opensource/lzo/download/lzo-2.10.tar.gz
 insert_setuptools: true
 prebuild:
-    wheel: cd ${SRC_ROOT_1} && CFLAGS=-fpic ./configure --prefix=${SRC_ROOT_0}/lzo --disable-shared && make install && sed -i -e 's/\["lzo"\]/\["lzo2"\]/' ${SRC_ROOT_0}/setup.py
+  wheel: cd ${SRC_ROOT_1} && CFLAGS=-fpic ./configure --prefix=${SRC_ROOT_0}/lzo --disable-shared && make install && sed -i -e 's/\["lzo"\]/\["lzo2"\]/' ${SRC_ROOT_0}/setup.py
 build_args: build_ext -I lzo/include:lzo/include/lzo -L lzo/lib bdist_wheel

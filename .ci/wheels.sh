@@ -6,12 +6,12 @@ echo "Detecting changes to wheels/..."
 
 echo "\$TRAVIS_COMMIT_RANGE is $TRAVIS_COMMIT_RANGE"
 
-if ! git diff --quiet $TRAVIS_COMMIT_RANGE -- 2>/dev/null; then
+if ! git diff --quiet "$TRAVIS_COMMIT_RANGE" -- 2>/dev/null; then
     git remote set-branches --add origin master
     git fetch
     TRAVIS_COMMIT_RANGE=origin/master...
 fi
-git diff --color=never --name-status $TRAVIS_COMMIT_RANGE -- wheels/
+git diff --color=never --name-status "$TRAVIS_COMMIT_RANGE" -- wheels/
 
 while read op path; do
     case "${path##*/}" in
@@ -27,4 +27,4 @@ while read op path; do
             echo "${path}" >> __wheels.txt
             ;;
     esac
-done < <(git diff --color=never --name-status $TRAVIS_COMMIT_RANGE -- wheels/)
+done < <(git diff --color=never --name-status "$TRAVIS_COMMIT_RANGE" -- wheels/)
