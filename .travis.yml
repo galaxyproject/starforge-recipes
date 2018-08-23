@@ -59,6 +59,10 @@ before_install:
   - set | grep '^WHEEL_METAS='
   - "[ ${#WHEEL_METAS[@]} -gt 0 ] || { echo 'No wheel changes, terminating'; travis_terminate 0; }"
 install:
+  - |
+    if [ "$TRAVIS_OS_NAME" == osx ]; then
+        pip install virtualenv
+    fi
   - virtualenv $STARFORGE_VENV
   - . $STARFORGE_VENV/bin/activate
   - pip install $STARFORGE
@@ -81,14 +85,14 @@ before_script:
     if [ $WHEEL_BUILDER_TYPE == 'c-extension' ]; then
         case $TRAVIS_OS_NAME in
             osx)
-                STARFORGE_IMAGE_ARGS="--image=\"ci/osx-${PY}\""
+                STARFORGE_IMAGE_ARGS="--image=ci/osx-${PY}"
                 ;;
             linux)
-                STARFORGE_IMAGE_ARGS="--image=\"ci/linux-${PY}:x86_64\" --image=\"ci/linux-${PY}:i686\""
+                STARFORGE_IMAGE_ARGS="--image=ci/linux-${PY}:x86_64 --image=ci/linux-${PY}:i686"
                 ;;
         esac
     else
-        STARFORGE_IMAGE_ARGS="--image=\"ci/linux-${PY}:${WHEEL_BUILDER_TYPE}\""
+        STARFORGE_IMAGE_ARGS="--image=ci/linux-${PY}:${WHEEL_BUILDER_TYPE}"
     fi
 script:
   - |
