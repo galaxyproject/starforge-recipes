@@ -12,6 +12,7 @@ env:
   global:
     - STARFORGE="git+https://github.com/natefoo/starforge.git@py3-wheels#egg=starforge"
     - STARFORGE_CMD="starforge --config-file=starforge.yml"
+    - STARFORGE_VENV="$HOME/venv"
     - WHEEL_BUILDER_TYPE="c-extension"
     - WHEEL_METAS=()
     - BUILD_WHEEL_METAS=()
@@ -33,13 +34,6 @@ matrix:
         - PY="3.6"
       install: &purepy_install
         - pip install $STARFORGE
-      script: &purepy_script
-        - |
-          for meta in "${BUILD_WHEEL_METAS[@]}"; do
-              _f=${meta#wheels/} ; wheel=${_f%%/*}
-              $STARFORGE_CMD --debug wheel --wheels-config="$meta" --image="ci/linux-${PY}:${WHEEL_BUILDER_TYPE}" "$wheel"
-              $STARFORGE_CMD --debug test_wheel --wheels-config="$meta" --image="ci/linux-${PY}:${WHEEL_BUILDER_TYPE}" "$wheel"
-          done
 
     - name: "Pure Python 2 Wheels"
       os: linux
@@ -49,7 +43,6 @@ matrix:
         - WHEEL_BUILDER_TYPE="purepy"
         - PY="2.7"
       install: *purepy_install
-      script: *purepy_script
 
     - name: "Pure Python 3 Wheels"
       os: linux
@@ -59,16 +52,16 @@ matrix:
         - WHEEL_BUILDER_TYPE="purepy"
         - PY="3.6"
       install: *purepy_install
-      script: *purepy_script
 
 before_install:
-  #- ./.ci/wheels.sh
-  # sets $WHEELS
+  # sets $WHEEL_METAS
   - eval $(./.ci/wheels.sh)
   - set | grep '^WHEEL_METAS='
   - "[ ${#WHEEL_METAS[@]} -gt 0 ] || { echo 'No wheel changes, terminating'; travis_terminate 0; }"
 install:
-  - ./.ci/wheels-install.sh
+  - virtualenv $STARFORGE_VENV
+  - . $STARFORGE_VENV/bin/activate
+  - pip install $STARFORGE
 before_script:
   - BUILD_WHEEL_METAS=()
   - |
@@ -83,17 +76,36 @@ before_script:
     done
   - set | grep '^BUILD_WHEEL_METAS='
   - "[ ${#BUILD_WHEEL_METAS[@]} -gt 0 ] || { echo \"No wheel changes for builder '$WHEEL_BUILDER_TYPE', terminating\"; travis_terminate 0; }"
-#script:
-#  - |
-#    if [ -f __wheels.txt ]; then
-#        ./.ci/wheels-build.sh
-#    else
-#        echo "build: nothing to do"
-#    fi
-#after_success:
-#  - |
-#    if [ -f __wheels.txt -a "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" == "master" -a -n "$encrypted_632cb16dd578_key" ]; then
-#        ./.ci/wheels-deploy.sh
-#    else
-#        echo "deploy: nothing to do"
-#    fi
+  - "[ $WHEEL_BUILDER_TYPE != 'c-extension' ] || ./.ci/wheels-install.sh"
+  - |
+    if [ $WHEEL_BUILDER_TYPE == 'c-extension' ]; then
+        case $TRAVIS_OS_NAME in
+            osx)
+                STARFORGE_IMAGE_ARGS="--image=\"ci/osx-${PY}\""
+                ;;
+            linux)
+                STARFORGE_IMAGE_ARGS="--image=\"ci/linux-${PY}:x86_64\" --image=\"ci/linux-${PY}:i686\""
+                ;;
+        esac
+    else
+        STARFORGE_IMAGE_ARGS="--image=\"ci/linux-${PY}:${WHEEL_BUILDER_TYPE}\""
+    fi
+script:
+  - |
+    for meta in "${BUILD_WHEEL_METAS[@]}"; do
+        _f=${meta#wheels/} ; wheel=${_f%%/*}
+        echo "Building '$wheel' wheel from config: $meta"
+        $STARFORGE_CMD --debug wheel --wheels-config="$meta" $STARFORGE_IMAGE_ARGS "$wheel"
+        echo "Testing '$wheel' wheel"
+        $STARFORGE_CMD --debug test_wheel --wheels-config="$meta" $STARFORGE_IMAGE_ARGS "$wheel"
+    done
+after_success:
+  - '[ "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" == "master" -a -n "$encrypted_632cb16dd578_key" ] || { echo "Nothing to deploy"; travis_terminate 0; }'
+  - openssl aes-256-cbc -K $encrypted_632cb16dd578_key -iv $encrypted_632cb16dd578_iv -in .ci/starforge-depot.key.enc -out .ci/starforge-depot.key -d
+  - echo 'wheels.galaxyproject.org ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCXELLgds0rObMT25AWrUFBCx6W6Z5j/wTlT54ke/grCo6RaQ9gLc5GHrJnApKpqVzyNbCIdhz/50QpzVr6EsKSITfadkoDfmmgISq6i2R+OpVgjrBvNWrUtNy6qcZqvgReOyc7yZGlhhZFU8KMTGb2Qajo3TNYiSo9Sbt96HHQIAni1xcocI1Wqw6v/wKlg+2qQgO5g56XzVeZ4yS7zTlKgLexm1GIG3CNI42lndQJJ2pVD/TJ4CDC3CV2HRv5wpJ8Y/T5/7iZr0H/5lvVd5S8wxAx5xrJr1UOIQ/76fjymq5L0kK9FpsX3vjHAOvVkwykGm2I/P4YXB6I+nuJCYtP' >> $HOME/.ssh/known_hosts
+  - echo 'wheels.galaxyproject.org ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPTnO0DR+VKfErJfN20IY6rjHbbismna9z6SQLEYzbQwpc20fQ06qmMsGJpLD4stBB2zQibTmKRd00QNWAfdILY=' >> $HOME/.ssh/known_hosts
+  - echo 'wheels.galaxyproject.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAxM4arE1L41qQ88XDNIxiAVnHeF3S2qloeTUe3AmI85' >> $HOME/.ssh/known_hosts
+  - eval "$(ssh-agent -s)"
+  - chmod 600 .ci/starforge-depot.key
+  - ssh-add .ci/starforge-depot.key
+  - scp -p *.whl wheels@wheels.galaxyproject.org:/srv/nginx/wheels.galaxyproject.org/packages
