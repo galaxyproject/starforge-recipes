@@ -106,6 +106,7 @@ script:
         echo "Testing '$wheel' wheel"
         $STARFORGE_CMD --debug test_wheel --wheels-config="$meta" $STARFORGE_IMAGE_ARGS "$wheel"
     done
+
 after_success:
   - '[ "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" == "master" -a -n "$encrypted_632cb16dd578_key" ] || { echo "Nothing to deploy"; travis_terminate 0; }'
   - openssl aes-256-cbc -K $encrypted_632cb16dd578_key -iv $encrypted_632cb16dd578_iv -in .ci/starforge-depot.key.enc -out .ci/starforge-depot.key -d
