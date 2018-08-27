@@ -83,7 +83,7 @@ before_script:
   - set | grep '^BUILD_WHEEL_METAS='
   - "[ ${#BUILD_WHEEL_METAS[@]} -gt 0 ] || { echo \"No wheel changes for builder '$WHEEL_BUILDER_TYPE', terminating\"; travis_terminate 0; }"
   - |
-    if [ $WHEEL_BUILDER_TYPE == 'c-extension' ]; then
+    if [ "$WHEEL_BUILDER_TYPE" == 'c-extension' ]; then
         case $TRAVIS_OS_NAME in
             osx)
                 STARFORGE_IMAGE_ARGS="--image=ci/osx-${PY}"
