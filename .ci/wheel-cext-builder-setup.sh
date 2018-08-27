@@ -1,10 +1,7 @@
 #!/bin/bash
 set -e
-set -xv
-
-starforge="git+https://github.com/natefoo/starforge.git@py3-wheels#egg=starforge"
-virtualenv_vers="16.0.0"
-virtualenv="https://files.pythonhosted.org/packages/33/bc/fa0b5347139cd9564f0d44ebd2b147ac97c36b2403943dbee8a25fd74012/virtualenv-16.0.0.tar.gz"
+#set -xv
+set -x
 
 case $TRAVIS_OS_NAME in
     osx)
@@ -28,18 +25,16 @@ case $TRAVIS_OS_NAME in
         sudo ln -s /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer /Developer
         curl -LO https://www.python.org/ftp/python/${PY}.${pypt}/python-${PY}.${pypt}-macosx10.6.pkg
         sudo installer -pkg python-${PY}.${pypt}-macosx10.6.pkg -target /
-        curl -O "$virtualenv"
-        tar zxvf virtualenv-${virtualenv_vers}.tar.gz
-        /Library/Frameworks/Python.framework/Versions/${PY}/bin/python${PY%%.*} ./virtualenv-${virtualenv_vers}/virtualenv.py $HOME/venv
-        . $HOME/venv/bin/activate
-        # pip can't upgrade itself due to TLS errors
-        #curl https://bootstrap.pypa.io/get-pip.py | python
-        pip install $starforge
+        # we need Starforge in the buildenv since the osx build uses the local execution context, but installing it a
+        # second time should be low cost since pip will have cached it
+        rm -rf $STARFORGE_VENV
+        virtualenv -p /Library/Frameworks/Python.framework/Versions/${PY}/bin/python${PY%%.*} $STARFORGE_VENV
+        # $STARFORGE_VENV should still be activated
+        #. $HOME/buildenv/bin/activate
+        pip install $STARFORGE
         pip install delocate
         ;;
     linux)
-        virtualenv $HOME/venv
-        $HOME/venv/bin/pip install $starforge
         for arch in x86_64 i686; do
             image=quay.io/pypa/manylinux1_$arch
             docker pull $image
@@ -53,7 +48,7 @@ case $TRAVIS_OS_NAME in
                     entrypoint=
                     ;;
             esac
-            sed -e "s%ARCH%${arch}%g" -e "s%STARFORGE%${starforge}%g" -e "s%LINUX32%${linux32}%g" \
+            sed -e "s%ARCH%${arch}%g" -e "s%STARFORGE%${STARFORGE}%g" -e "s%LINUX32%${linux32}%g" \
                 -e "s%ENTRYPOINT%${entrypoint}%g" .ci/Dockerfile > .ci/Dockerfile.$arch
             echo ".ci/Dockerfile.$arch contains:"
             cat .ci/Dockerfile.$arch
@@ -61,3 +56,5 @@ case $TRAVIS_OS_NAME in
         done
         ;;
 esac
+
+set +xv

@@ -2,6 +2,10 @@
 set -e
 #set -xv
 
+WHEEL_METAS=()
+
+{
+
 echo "Detecting changes to wheels/..."
 
 git diff --quiet "$TRAVIS_COMMIT_RANGE" -- || GIT_DIFF_EXIT_CODE=$?
@@ -25,7 +29,16 @@ while read op path; do
     case "$op" in
         A|M)
             echo "$op $path"
-            echo "${path}" >> __wheels.txt
+            #echo "${path}" >> __wheels.txt
+            WHEEL_METAS+=("${path}")
             ;;
     esac
 done < <(git diff --color=never --name-status "$TRAVIS_COMMIT_RANGE" -- wheels/)
+
+} >&2
+
+echo -n 'WHEEL_METAS=('
+for path in "${WHEEL_METAS[@]}"; do
+    echo -n "\"${path}\" "
+done
+echo ')'
