@@ -61,7 +61,7 @@ before_install:
 
 install:
   - |
-    if [ "$TRAVIS_OS_NAME" == osx ]; then
+    if [ "$TRAVIS_OS_NAME" == 'osx' ]; then
         pip install virtualenv
     fi
   - virtualenv $STARFORGE_VENV
@@ -81,7 +81,11 @@ before_script:
         fi
     done
   - set | grep '^BUILD_WHEEL_METAS='
-  - "[ ${#BUILD_WHEEL_METAS[@]} -gt 0 ] || { echo \"No wheel changes for builder '$WHEEL_BUILDER_TYPE', terminating\"; travis_terminate 0; }"
+  - |
+    if [ ${#BUILD_WHEEL_METAS[@]} -eq 0 ]; then
+        echo "No wheel changes for builder '$WHEEL_BUILDER_TYPE', terminating"
+        travis_terminate 0
+    fi
   - |
     if [ "$WHEEL_BUILDER_TYPE" == 'c-extension' ]; then
         case $TRAVIS_OS_NAME in
