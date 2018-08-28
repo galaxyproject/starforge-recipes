@@ -84,6 +84,7 @@ before_script:
   - |
     if [ ${#BUILD_WHEEL_METAS[@]} -eq 0 ]; then
         echo "No wheel changes for builder '$WHEEL_BUILDER_TYPE', terminating"
+        ps aux
         travis_terminate 0
     fi
   - |
