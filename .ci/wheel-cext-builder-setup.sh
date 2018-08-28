@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-#set -xv
 set -x
 
 case $TRAVIS_OS_NAME in
@@ -56,5 +55,3 @@ case $TRAVIS_OS_NAME in
         done
         ;;
 esac
-
-set +xv
