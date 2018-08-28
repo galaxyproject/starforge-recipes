@@ -3,7 +3,6 @@ services:
   - docker
 
 os:
-  - linux
   - osx
 
 language: minimal
@@ -14,59 +13,52 @@ env:
     - STARFORGE_CMD="starforge --config-file=starforge.yml"
     - STARFORGE_VENV="$HOME/venv"
     - WHEEL_BUILDER_TYPE="c-extension"
-    - WHEEL_METAS=()
-    - BUILD_WHEEL_METAS=()
+    # arrays cannot be exported in Bash
   matrix:
     - PY="2.7"
-    - PY="3.4"
-    - PY="3.5"
-    - PY="3.6"
-    - PY="3.7"
-
-matrix:
-  include:
-    - name: "Universal Pure Python Wheels"
-      os: linux
-      language: python
-      python: "3.6"
-      env:
-        - WHEEL_BUILDER_TYPE="universal"
-        - PY="3.6"
-      install: &purepy_install
-        - pip install $STARFORGE
-
-    - name: "Pure Python 2 Wheels"
-      os: linux
-      language: python
-      python: "2.7"
-      env:
-        - WHEEL_BUILDER_TYPE="purepy"
-        - PY="2.7"
-      install: *purepy_install
-
-    - name: "Pure Python 3 Wheels"
-      os: linux
-      language: python
-      python: "3.6"
-      env:
-        - WHEEL_BUILDER_TYPE="purepy"
-        - PY="3.6"
-      install: *purepy_install
 
 before_install:
-  # sets $WHEEL_METAS
-  - eval $(./.ci/wheel-metas.sh)
+  - WHEEL_METAS=()
+  - echo 'Detecting changes to wheels/...'
+  - git diff --quiet "$TRAVIS_COMMIT_RANGE" --; GIT_DIFF_EXIT_CODE=$?
+  - |
+    if [ "$GIT_DIFF_EXIT_CODE" -gt 1 ]; then
+        git remote set-branches --add origin master
+        git fetch
+        TRAVIS_COMMIT_RANGE=origin/master...
+    fi
+  - echo "\$TRAVIS_COMMIT_RANGE is $TRAVIS_COMMIT_RANGE"
+  - |
+    while read op path; do
+        case "${path##*/}" in
+            meta.yml)
+                ;;
+            *)
+                continue
+                ;;
+        esac
+        case "$op" in
+            A|M)
+                echo "$op $path"
+                WHEEL_METAS+=("${path}")
+                ;;
+        esac
+    done < <(git diff --color=never --name-status "$TRAVIS_COMMIT_RANGE" -- wheels/)
   - set | grep '^WHEEL_METAS='
-  - "[ ${#WHEEL_METAS[@]} -gt 0 ] || { echo 'No wheel changes, terminating'; travis_terminate 0; }"
+  - |
+    if [ ${#WHEEL_METAS[@]} -eq 0 ]; then
+        echo 'No wheel changes, terminating'
+        travis_terminate 0
+    fi
 
 install:
   - |
     if [ "$TRAVIS_OS_NAME" == 'osx' ]; then
         pip install virtualenv
     fi
-  - virtualenv $STARFORGE_VENV
-  - . $STARFORGE_VENV/bin/activate
-  - pip install $STARFORGE
+  - virtualenv "$STARFORGE_VENV"
+  - . "$STARFORGE_VENV"/bin/activate
+  - pip install "$STARFORGE"
 
 before_script:
   - BUILD_WHEEL_METAS=()
@@ -112,7 +104,11 @@ script:
     done
 
 after_success:
-  - '[ "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" == "master" -a -n "$encrypted_632cb16dd578_key" ] || { echo "Nothing to deploy"; travis_terminate 0; }'
+  - |
+    if ! [ "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" == "master" -a -n "$encrypted_632cb16dd578_key" ]; then
+        echo 'Nothing to deploy'
+        travis_terminate 0
+    fi
   - openssl aes-256-cbc -K $encrypted_632cb16dd578_key -iv $encrypted_632cb16dd578_iv -in .ci/starforge-depot.key.enc -out .ci/starforge-depot.key -d
   - echo 'wheels.galaxyproject.org ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCXELLgds0rObMT25AWrUFBCx6W6Z5j/wTlT54ke/grCo6RaQ9gLc5GHrJnApKpqVzyNbCIdhz/50QpzVr6EsKSITfadkoDfmmgISq6i2R+OpVgjrBvNWrUtNy6qcZqvgReOyc7yZGlhhZFU8KMTGb2Qajo3TNYiSo9Sbt96HHQIAni1xcocI1Wqw6v/wKlg+2qQgO5g56XzVeZ4yS7zTlKgLexm1GIG3CNI42lndQJJ2pVD/TJ4CDC3CV2HRv5wpJ8Y/T5/7iZr0H/5lvVd5S8wxAx5xrJr1UOIQ/76fjymq5L0kK9FpsX3vjHAOvVkwykGm2I/P4YXB6I+nuJCYtP' >> $HOME/.ssh/known_hosts
   - echo 'wheels.galaxyproject.org ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPTnO0DR+VKfErJfN20IY6rjHbbismna9z6SQLEYzbQwpc20fQ06qmMsGJpLD4stBB2zQibTmKRd00QNWAfdILY=' >> $HOME/.ssh/known_hosts
