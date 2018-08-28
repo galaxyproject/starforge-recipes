@@ -16,3 +16,5 @@ yum:
   - pcre-devel
 brew:
   - pcre
+skip_tests:
+  - uwsgidecorators
