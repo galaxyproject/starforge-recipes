@@ -142,7 +142,7 @@ script:
             echo "Building '$wheel' wheel failed"
             BUILD_EXIT_CODE=1
         else
-            echo "`starforge wheel` exited with code '$STARFORGE_EXIT_CODE', skipping wheel test"
+            echo "\`starforge wheel\` exited with code '$STARFORGE_EXIT_CODE', skipping wheel test"
         fi
     done
     return "$BUILD_EXIT_CODE"
