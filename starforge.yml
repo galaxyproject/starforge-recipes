@@ -10,6 +10,10 @@ imagesets:
         - ci/linux-2.7:purepy
     purepy3-wheel:
         - ci/linux-3.6:purepy
+    cext-py2-wheel:
+        - ci/linux-2.7:x86_64
+        - ci/linux-2.7:i686
+        - ci/osx-2.7
     default-wheel:
         - ci/linux-2.7:x86_64
         - ci/linux-2.7:i686
