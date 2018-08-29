@@ -1,0 +1,12 @@
+---
+
+name: bx-python
+version: 0.8.2
+type: wheel
+purepy: false
+prebuild:
+  wheel: pip install --index-url https://wheels.galaxyproject.org/simple/ --extra-index-url https://pypi.python.org/simple numpy==1.15.1 python-lzo
+yum:
+  # manylinux1 images don't preinstall these, which is probably the way they
+  # should all work
+  - zlib-devel
