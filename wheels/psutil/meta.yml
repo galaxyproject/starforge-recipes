@@ -2,3 +2,4 @@
 
 name: psutil
 version: 5.4.7
+type: wheel
