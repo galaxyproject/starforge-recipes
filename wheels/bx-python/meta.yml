@@ -1,0 +1,13 @@
+---
+
+name: bx-python
+version: 0.8.2
+type: wheel
+purepy: false
+setup_requires:
+  - Cython
+  - numpy
+yum:
+  # manylinux1 images don't preinstall these, which is probably the way they
+  # should all work
+  - zlib-devel

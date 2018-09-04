@@ -30,8 +30,7 @@ case $TRAVIS_OS_NAME in
         virtualenv -p /Library/Frameworks/Python.framework/Versions/${PY}/bin/python${PY%%.*} $STARFORGE_VENV
         # $STARFORGE_VENV should still be activated
         #. $HOME/buildenv/bin/activate
-        pip install $STARFORGE
-        pip install delocate
+        pip install delocate $STARFORGE
         ;;
     linux)
         for arch in x86_64 i686; do
