@@ -130,22 +130,20 @@ before_script:
 
 script:
   - |
-    BUILD_EXIT_CODE=0
     for meta in "${BUILD_WHEEL_METAS[@]}"; do
         _f=${meta#wheels/} ; wheel=${_f%%/*}
         echo "Building '$wheel' wheel from config: $meta"
         $STARFORGE_CMD --debug wheel --wheels-config="$meta" $STARFORGE_IMAGE_ARGS "$wheel"; STARFORGE_EXIT_CODE=$?
         if [ "$STARFORGE_EXIT_CODE" -eq 0 ]; then
             echo "Testing '$wheel' wheel"
-            $STARFORGE_CMD --debug test_wheel --wheels-config="$meta" $STARFORGE_IMAGE_ARGS "$wheel"
+            $STARFORGE_CMD --debug test_wheel --wheels-config="$meta" $STARFORGE_IMAGE_ARGS "$wheel" || exit $?
         elif [ "$STARFORGE_EXIT_CODE" -eq 1 ]; then
             echo "Building '$wheel' wheel failed"
-            BUILD_EXIT_CODE=1
+            exit 1
         else
             echo "\`starforge wheel\` exited with code '$STARFORGE_EXIT_CODE', skipping wheel test"
         fi
     done
-    return "$BUILD_EXIT_CODE"
 
 after_success:
   - |
