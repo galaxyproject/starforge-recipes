@@ -100,7 +100,7 @@ before_script:
   - |
     for meta in "${WHEEL_METAS[@]}"; do
         _f=${meta#wheels/} ; wheel=${_f%%/*}
-        wheel_type=$($STARFORGE_CMD wheel_type --wheels-config="$meta" "$wheel")
+        wheel_type=$($STARFORGE_CMD wheel_type --wheels-config="$meta" "$wheel") || exit $?
         if [ "$wheel_type" == "$WHEEL_BUILDER_TYPE" ]; then
             BUILD_WHEEL_METAS+=("$meta")
         else
