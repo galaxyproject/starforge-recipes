@@ -1,0 +1,10 @@
+---
+
+name: PyYAML
+version: 3.13
+type: wheel
+insert_setuptools: true
+apt:
+  - libyaml-dev
+yum:
+  - libyaml-devel
