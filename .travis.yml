@@ -10,7 +10,7 @@ language: minimal
 
 env:
   global:
-    - STARFORGE="git+https://github.com/natefoo/starforge.git@py3-wheels#egg=starforge"
+    - STARFORGE="git+https://github.com/galaxyproject/starforge#egg=starforge"
     - STARFORGE_CMD="starforge --config-file=starforge.yml"
     - STARFORGE_VENV="$HOME/venv"
     - WHEEL_BUILDER_TYPE="c-extension"
