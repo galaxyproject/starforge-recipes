@@ -14,6 +14,7 @@ env:
     - STARFORGE_CMD="starforge --config-file=starforge.yml"
     - STARFORGE_VENV="$HOME/venv"
     - WHEEL_BUILDER_TYPE="c-extension"
+    - DELOCATE="git+https://github.com/natefoo/delocate@top-level-fix-squash#egg=delocate"
     # arrays cannot be exported in Bash
   matrix:
     - PY="2.7"
