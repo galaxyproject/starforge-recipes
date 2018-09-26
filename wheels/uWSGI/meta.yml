@@ -2,6 +2,7 @@
 
 name: uWSGI
 version: 2.0.17.1
+build: 2
 type: wheel
 imageset: cext-py2-wheel
 purepy: false
