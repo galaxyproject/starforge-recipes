@@ -3,3 +3,4 @@
 name: wrapt
 version: 1.10.11
 type: wheel
+purepy: false
