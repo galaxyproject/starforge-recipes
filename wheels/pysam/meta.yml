@@ -5,7 +5,4 @@ version: 0.15.1
 type: wheel
 purepy: false
 insert_setuptools: true
-yum:
-  - bzip2-devel
-  - xz-devel
-  - zlib-devel
+imageset: cext-osx-wheel
