@@ -1,0 +1,8 @@
+---
+
+name: pysam
+version: 0.15.1
+type: wheel
+purepy: false
+insert_setuptools: true
+imageset: cext-osx-wheel

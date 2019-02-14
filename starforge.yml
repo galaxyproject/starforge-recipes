@@ -14,6 +14,12 @@ imagesets:
         - ci/linux-2.7:x86_64
         - ci/linux-2.7:i686
         - ci/osx-2.7
+    cext-osx-wheel:
+        - ci/osx-2.7
+        - ci/osx-3.4
+        - ci/osx-3.5
+        - ci/osx-3.6
+        - ci/osx-3.7
     default-wheel:
         - ci/linux-2.7:x86_64
         - ci/linux-2.7:i686
