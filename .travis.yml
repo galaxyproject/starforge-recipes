@@ -18,7 +18,6 @@ env:
     # arrays cannot be exported in Bash
   matrix:
     - PY="2.7"
-    - PY="3.4"
     - PY="3.5"
     - PY="3.6"
     - PY="3.7"
