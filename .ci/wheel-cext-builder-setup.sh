@@ -8,9 +8,6 @@ case $TRAVIS_OS_NAME in
             2.7)
                 pypt=15
                 ;;
-            3.4)
-                pypt=4
-                ;;
             3.5)
                 pypt=4
                 ;;
