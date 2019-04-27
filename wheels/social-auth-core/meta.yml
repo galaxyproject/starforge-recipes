@@ -7,4 +7,4 @@ purepy: true
 src:
   - https://github.com/python-social-auth/social-core/archive/d3d9c81bdc8b873ff5610e853dc7e9c8f1133e35.tar.gz
 prebuild:
-  all: sed -i -e 's/__version__ = "3\.1\.0"/__version__ = "3.1.0+gx0"/' ${SRC_ROOT}/social_core/__init__.py 
+  all: sed -i -e "s/__version__ = '3\.1\.0'/__version__ = '3.1.0+gx0'/" ${SRC_ROOT}/social_core/__init__.py
