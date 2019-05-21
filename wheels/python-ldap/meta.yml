@@ -39,9 +39,7 @@ prebuild:
         make depend ;
         make ;
         make install ;
-        sed -i -e 's#library_dirs =#library_dirs = /usr/local/ssl/lib#' ${SRC_ROOT_0}/setup.cfg ;
-        sed -i -e 's#include_dirs =#include_dirs = /usr/local/ssl/include/openssl/#' ${SRC_ROOT_0}/setup.cfg ;
-        sed -i -e 's/libs = ldap_r/libs = lber sasl2 ldap_r ssl crypto/' ${SRC_ROOT_0}/setup.cfg ;
+        sed -i -e 's#libs = ldap_r lber#libs = ldap_r lber sasl2 ssl crypto\nlibrary_dirs = /usr/local/ssl/lib\ninclude_dirs = /usr/local/ssl/include/openssl/#' ${SRC_ROOT_0}/setup.cfg ;
     fi
 yum:
   - groff
