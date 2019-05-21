@@ -4,6 +4,7 @@ name: python-ldap
 version: 3.2.0
 type: wheel
 purepy: false
+build: 1
 src:
   - https://gmplib.org/download/gmp/gmp-6.1.2.tar.bz2
   - https://ftp.gnu.org/gnu/nettle/nettle-3.4.1.tar.gz

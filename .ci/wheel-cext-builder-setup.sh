@@ -28,6 +28,7 @@ case $TRAVIS_OS_NAME in
         # $STARFORGE_VENV should still be activated
         #. $HOME/buildenv/bin/activate
         pip install "$DELOCATE" "${STARFORGE}[lzma]"
+        pip install pyopenssl ndg-httpsclient pyasn1
         ;;
     linux)
         for arch in x86_64 i686; do
