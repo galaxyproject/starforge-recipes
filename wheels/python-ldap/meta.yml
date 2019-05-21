@@ -13,8 +13,7 @@ src:
 prebuild:
   wheel: >
     if [ `uname -s` == 'Darwin' ] ; then
-        sed -e 's/^library_dirs.*//' -e 's#^include_dirs.*#include_dirs = /Developer/SDKs/MacOSX10.6.sdk/usr/include /Developer/SDKs/MacOSX10.6.sdk/usr/include/sasl#' -i .orig ${SRC_ROOT_0}/setup.cfg ;
-        sed -e $'$i\\\n#define LDAP_VLV_ERROR 0x4C\n' -i .orig ${SRC_ROOT_0}/Modules/errors.h ;
+        sed -e 's#^\[_ldap\]$#[_ldap]\ninclude_dirs = /Developer/SDKs/MacOSX10.6.sdk/usr/include /Developer/SDKs/MacOSX10.6.sdk/usr/include/sasl#' -i .orig ${SRC_ROOT_0}/setup.cfg ;
     else
         cd $SRC_ROOT_1 ;
         ./configure ;
