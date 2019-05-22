@@ -9,8 +9,8 @@ src:
   - https://gmplib.org/download/gmp/gmp-6.1.2.tar.bz2
   - https://ftp.gnu.org/gnu/nettle/nettle-3.4.1.tar.gz
   - https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.7.tar.xz
-  - http://www.openssl.org/source/openssl-1.0.2r.tar.gz
-  - http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.tgz
+  - https://www.openssl.org/source/openssl-1.0.2r.tar.gz
+  - https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.tgz
 prebuild:
   wheel: >
     if [ `uname -s` == 'Darwin' ] ; then
