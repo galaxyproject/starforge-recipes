@@ -1,0 +1,47 @@
+---
+
+name: python-ldap
+version: 3.2.0
+type: wheel
+purepy: false
+build: 1
+src:
+  - https://gmplib.org/download/gmp/gmp-6.1.2.tar.bz2
+  - https://ftp.gnu.org/gnu/nettle/nettle-3.4.1.tar.gz
+  - https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.7.tar.xz
+  - https://www.openssl.org/source/openssl-1.0.2r.tar.gz
+  - https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.47.tgz
+prebuild:
+  wheel: >
+    if [ `uname -s` == 'Darwin' ] ; then
+        sed -e 's#^\[_ldap\]$#[_ldap]\ninclude_dirs = /Developer/SDKs/MacOSX10.6.sdk/usr/include /Developer/SDKs/MacOSX10.6.sdk/usr/include/sasl#' -i .orig ${SRC_ROOT_0}/setup.cfg ;
+    else
+        cd $SRC_ROOT_1 ;
+        ./configure ;
+        make ;
+        make install ;
+        cd $SRC_ROOT_2 ;
+        ./configure ;
+        make ;
+        make install ;
+        export PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig/:$PKG_CONFIG_PATH ;
+        cd $SRC_ROOT_3 ;
+        ./configure --with-included-libtasn1 --with-included-unistring --without-p11-ki ;
+        make ;
+        make install ;
+        cd $SRC_ROOT_4 ;
+        ./config shared enable-ssl2 enable-ssl3 ;
+        make depend ;
+        make ;
+        make install ;
+        cd $SRC_ROOT_5 ;
+        CFLAGS="-fpic -I/usr/local/ssl/include/ -L/usr/local/ssl/lib/" ./configure --disable-shared --enable-backends=no --enable-slapd=no ;
+        make depend ;
+        make ;
+        make install ;
+        sed -i -e 's#libs = ldap_r lber#libs = ldap_r lber sasl2 ssl crypto\nlibrary_dirs = /usr/local/ssl/lib\ninclude_dirs = /usr/local/ssl/include/openssl/#' ${SRC_ROOT_0}/setup.cfg ;
+    fi
+yum:
+  - groff
+  - cyrus-sasl-devel
+  - libidn-devel
