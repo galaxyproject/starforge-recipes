@@ -6,21 +6,29 @@ case $TRAVIS_OS_NAME in
     osx)
         case $PY in
             2.7)
-                pypt=15
+                pypt=17
+                macos_version=10.6
                 ;;
             3.5)
                 pypt=4
+                macos_version=10.6
                 ;;
             3.6)
-                pypt=6
+                pypt=8
+                macos_version=10.6
                 ;;
             3.7)
+                pypt=5
+                macos_version=10.6
+                ;;
+            3.8)
                 pypt=0
+                macos_version=10.9
                 ;;
         esac
         sudo ln -s /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer /Developer
-        curl -LO https://www.python.org/ftp/python/${PY}.${pypt}/python-${PY}.${pypt}-macosx10.6.pkg
-        sudo installer -pkg python-${PY}.${pypt}-macosx10.6.pkg -target /
+        curl -LO https://www.python.org/ftp/python/${PY}.${pypt}/python-${PY}.${pypt}-macosx${macos_version}.pkg
+        sudo installer -pkg python-${PY}.${pypt}-macosx${macos_version}.pkg -target /
         # we need Starforge in the buildenv since the osx build uses the local execution context, but installing it a
         # second time should be low cost since pip will have cached it
         rm -rf $STARFORGE_VENV

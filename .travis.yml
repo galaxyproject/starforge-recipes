@@ -21,6 +21,7 @@ env:
     - PY="3.5"
     - PY="3.6"
     - PY="3.7"
+    - PY="3.8"
 
 matrix:
   include:
