@@ -156,9 +156,9 @@ images:
         pkgtool: yum
         buildpy: /opt/wheelenv/bin/python
         pythons:
-            - /opt/python/cp38-cp38m/bin/python
+            - /opt/python/cp38-cp38/bin/python
         py_abi_tags:
-            - cp38-cp38m
+            - cp38-cp38
         plat_name: manylinux1_x86_64
         force_plat: false
         use_auditwheel: true
@@ -167,9 +167,9 @@ images:
         pkgtool: yum
         buildpy: /opt/wheelenv/bin/python
         pythons:
-            - /opt/python/cp38-cp38m/bin/python
+            - /opt/python/cp38-cp38/bin/python
         py_abi_tags:
-            - cp38-cp38m
+            - cp38-cp38
         plat_name: manylinux1_i686
         force_plat: false
         use_auditwheel: true
@@ -228,7 +228,7 @@ images:
         pythons:
             - python  # from $PATH = buildpy
         py_abi_tags:
-            - cp38-cp38m
+            - cp38-cp38
         buildenv:
             MACOSX_DEPLOYMENT_TARGET: 10.9
         plat_name: macosx_10_9_intel
