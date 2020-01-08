@@ -1,6 +1,6 @@
 ---
 
+type: wheel
 name: mercurial
 version: 5.2.2
-type: wheel
 purepy: false
