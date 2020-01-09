@@ -138,10 +138,10 @@ script:
     for meta in "${BUILD_WHEEL_METAS[@]}"; do
         _f=${meta#wheels/} ; wheel=${_f%%/*}
         echo "Building '$wheel' wheel from config: $meta"
-        $STARFORGE_CMD --debug wheel --wheels-config="$meta" $STARFORGE_IMAGE_ARGS "$wheel"; STARFORGE_EXIT_CODE=$?
+        $STARFORGE_CMD --debug wheel --wheels-config="$meta" --wheel-dir=wheelhouse $STARFORGE_IMAGE_ARGS "$wheel"; STARFORGE_EXIT_CODE=$?
         if [ "$STARFORGE_EXIT_CODE" -eq 0 ]; then
             echo "Testing '$wheel' wheel"
-            $STARFORGE_CMD --debug test_wheel --wheels-config="$meta" $STARFORGE_IMAGE_ARGS "$wheel" || exit $?
+            $STARFORGE_CMD --debug test_wheel --wheels-config="$meta" --wheel-dir=wheelhouse $STARFORGE_IMAGE_ARGS "$wheel" || exit $?
         elif [ "$STARFORGE_EXIT_CODE" -eq 1 ]; then
             echo "Building '$wheel' wheel failed"
             exit 1
@@ -157,5 +157,5 @@ after_success:
         travis_terminate 0
     fi
   - pip install "$S3PYPI" "$S3PYPI_ROOT_INDEX"
-  - s3pypi --bucket galaxy-wheels --dist-path $(pwd) --region us-east-2
+  - s3pypi --bucket galaxy-wheels --dist-path $(pwd)/wheelhouse --region us-east-2
   - s3pypi-root-index --bucket galaxy-wheels --region us-east-2
