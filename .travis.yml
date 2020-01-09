@@ -12,7 +12,7 @@ env:
   global:
     - STARFORGE="git+https://github.com/galaxyproject/starforge#egg=starforge"
     - STARFORGE_CMD="starforge --config-file=starforge.yml"
-    - S3PYPI="s3pypi"
+    - S3PYPI="git+https://github.com/natefoo/s3pypi@correct-index-on-force#egg=s3pypi"
     - S3PYPI_ROOT_INDEX="git+https://github.com/natefoo/s3pypi-root-index#egg=s3pypi-root-index"
     - STARFORGE_VENV="$HOME/venv"
     - WHEEL_BUILDER_TYPE="c-extension"
@@ -157,5 +157,5 @@ after_success:
         travis_terminate 0
     fi
   - pip install "$S3PYPI" "$S3PYPI_ROOT_INDEX"
-  - s3pypi --bucket galaxy-wheels --dist-path $(pwd)/wheelhouse --region us-east-2
+  - s3pypi --bucket galaxy-wheels --dist-path $(pwd)/wheelhouse --region us-east-2 --force
   - s3pypi-root-index --bucket galaxy-wheels --region us-east-2
