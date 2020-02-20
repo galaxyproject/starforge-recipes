@@ -94,7 +94,7 @@ before_install:
 install:
   - |
     if [ "$TRAVIS_OS_NAME" == 'osx' ]; then
-        pip install virtualenv
+        pip install 'virtualenv<20'
     fi
   - virtualenv "$STARFORGE_VENV"
   - . "$STARFORGE_VENV"/bin/activate
