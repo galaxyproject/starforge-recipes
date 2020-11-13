@@ -78,7 +78,7 @@ before_install:
   - |
     if [ ${#WHEEL_METAS[@]} -eq 0 ]; then
         echo 'No wheel changes, terminating'
-        travis_terminate 0
+        exit 0
     fi
 
 install:
@@ -106,7 +106,7 @@ before_script:
   - |
     if [ ${#BUILD_WHEEL_METAS[@]} -eq 0 ]; then
         echo "No wheel changes for builder '$WHEEL_BUILDER_TYPE', terminating"
-        travis_terminate 0
+        exit 0
     fi
   - |
     if [ "$WHEEL_BUILDER_TYPE" == 'c-extension' ]; then
@@ -144,7 +144,7 @@ after_success:
   - |
     if ! [ "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" == "master" -a -n "$encrypted_632cb16dd578_key" ]; then
         echo 'Nothing to deploy'
-        travis_terminate 0
+        exit 0
     fi
   - pip install "$S3PYPI" "$S3PYPI_ROOT_INDEX"
   - s3pypi --bucket galaxy-wheels --dist-path $(pwd)/wheelhouse --region us-east-2 --force
