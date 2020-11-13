@@ -1,7 +1,0 @@
----
-
-type: wheel
-name: subprocess32
-version: 3.5.4
-insert_setuptools: true
-imageset: cext-py2-wheel
