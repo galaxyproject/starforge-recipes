@@ -1,7 +1,7 @@
 ---
 
 name: pysam
-version: 0.15.2
+version: 0.16.0.1
 type: wheel
 purepy: false
 insert_setuptools: true
