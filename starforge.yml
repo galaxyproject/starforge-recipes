@@ -132,48 +132,48 @@ images:
     ci/osx-3.6:
         type: local
         pkgtool: brew
-        buildpy: ~/venv/bin/python
+        #buildpy: python  # from $PATH
         pythons:
             - python  # from $PATH = buildpy
         py_abi_tags:
             - cp36-cp36m
         buildenv:
-            MACOSX_DEPLOYMENT_TARGET: 10.6
-        plat_name: macosx_10_6_intel
+            MACOSX_DEPLOYMENT_TARGET: 10.14
+        plat_name: macosx_10_14_x86_64
         use_delocate: true
     ci/osx-3.7:
         type: local
         pkgtool: brew
-        buildpy: ~/venv/bin/python
+        #buildpy: python  # from $PATH
         pythons:
             - python  # from $PATH = buildpy
         py_abi_tags:
             - cp37-cp37m
         buildenv:
-            MACOSX_DEPLOYMENT_TARGET: 10.9
-        plat_name: macosx_10_6_intel
+            MACOSX_DEPLOYMENT_TARGET: 10.14
+        plat_name: macosx_10_14_x86_64
         use_delocate: true
     ci/osx-3.8:
         type: local
         pkgtool: brew
-        buildpy: ~/venv/bin/python
+        #buildpy: python  # from $PATH
         pythons:
             - python  # from $PATH = buildpy
         py_abi_tags:
             - cp38-cp38
         buildenv:
-            MACOSX_DEPLOYMENT_TARGET: 10.9
-        plat_name: macosx_10_9_intel
+            MACOSX_DEPLOYMENT_TARGET: 10.14
+        plat_name: macosx_10_14_x86_64
         use_delocate: true
     ci/osx-3.9:
         type: local
         pkgtool: brew
-        buildpy: ~/venv/bin/python
+        #buildpy: python  # from $PATH
         pythons:
             - python  # from $PATH = buildpy
         py_abi_tags:
             - cp39-cp39
         buildenv:
-            MACOSX_DEPLOYMENT_TARGET: 10.9
-        plat_name: macosx_10_9_intel
+            MACOSX_DEPLOYMENT_TARGET: 10.14
+        plat_name: macosx_10_14_x86_64
         use_delocate: true
