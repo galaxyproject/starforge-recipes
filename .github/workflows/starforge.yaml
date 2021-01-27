@@ -1,0 +1,88 @@
+name: starforge
+on: [push, pull_request]
+env:
+  STARFORGE: "git+https://github.com/galaxyproject/starforge#egg=starforge"
+  STARFORGE_CMD: "starforge --config-file=starforge.yml"
+  S3PYPI: "s3pypi"
+  S3PYPI_ROOT_INDEX: "git+https://github.com/natefoo/s3pypi-root-index#egg=s3pypi-root-index"
+  WHEEL_BUILDER_TYPE: "c-extension"
+  DELOCATE: "git+https://github.com/natefoo/delocate@top-level-fix-squash#egg=delocate"
+  S3_REGION: "us-east-2"
+  S3_BUCKET: "galaxy-wheels"
+jobs:
+  build:
+    name: Build Wheels
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+        python-version: [3.6, 3.7, 3.8, 3.9]
+        wheel_builder_type: [c-extension]
+        include:
+        - os: ubuntu-latest
+          python: 3.6
+          wheel_builder_type: purepy
+        - os: ubuntu-latest
+          python: 3.6
+          wheel_builder_type: universal
+    steps:
+    - uses: actions/checkout@v2
+    - uses: trilom/file-changes-action@v1.2.3
+      name: Collect file changes
+    - name: Filter file changes to wheel paths
+      run: |
+        jq -r '.[] | select(endswith("/meta.yml"))' $HOME/files_modified.json $HOME/files_added.json > $GITHUB_WORKSPACE/wheel_metas.txt
+    - uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Report python version
+      run: python -V
+    - name: Report python3 version
+      run: python3 -V
+    - name: Setup build environment
+      run: ./build.sh setup
+    - name: Build wheels
+      run: ./build.sh build
+      env:
+        WHEEL_BUILDER_TYPE: ${{ matrix.wheel_builder_type }}
+    - name: List wheelhouse
+      run: '[ -d "wheelhouse/" ] && ls -R "wheelhouse/" || echo "No wheelhouse dir"'
+    - uses: actions/upload-artifact@v2
+      with:
+        name: wheelhouse
+        path: "wheelhouse/"
+  deploy:
+    name: Deploy Wheels
+    needs: build
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v2
+      with:
+        name: wheelhouse
+        path: "wheelhouse/"
+      continue-on-error: true
+    - name: List wheelhouse
+      id: wheelhouse
+      run: ls -R "wheelhouse/" && echo "::set-output name=exists::true" || echo "::set-output name=exists::false"
+    - uses: actions/setup-python@v2
+      # FIXME: why doesn't this work? it is always evaluating to true
+      #if: ${{ steps.wheelhouse.outputs.exists }}
+      with:
+        python-version: 3.9
+    - name: Setup deploy environment
+      #if: ${{ steps.wheelhouse.outputs.exists }}
+      # Not using || here because it would mask venv/pip failures
+      run: 'if [ -d "wheelhouse/" ]; then python3 -m venv ./venv && ./venv/bin/pip install "$S3PYPI" "$S3PYPI_ROOT_INDEX"; else echo "No wheels to deploy"; fi'
+    - name: Deploy wheels
+      if: ${{ steps.wheelhouse.outputs.exists }}
+      run: 'if [ -d "wheelhouse/" ]; then ./venv/bin/s3pypi --bucket "$S3_BUCKET" --dist-path "./wheelhouse" --region "$S3_REGION" --force; else echo "No wheels to deploy"; fi'
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    - name: Update root index page
+      if: ${{ steps.wheelhouse.outputs.exists }}
+      run: 'if [ -d "wheelhouse/" ]; then ./venv/bin/s3pypi-root-index --bucket "$S3_BUCKET" --region "$S3_REGION"; else echo "No wheels to deploy"; fi'
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
