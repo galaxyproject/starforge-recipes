@@ -27,7 +27,7 @@ jobs:
           wheel_builder_type: universal
     steps:
     - uses: actions/checkout@v2
-    - uses: trilom/file-changes-action@v1.2.3
+    - uses: trilom/file-changes-action@v1.2.4
       name: Collect file changes
     - name: Filter file changes to wheel paths
       run: |
