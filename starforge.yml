@@ -49,7 +49,7 @@ images:
             - /opt/python/cp36-cp36m/bin/python
         py_abi_tags:
             - cp36-cp36m
-        plat_name: manylinux1_x86_64
+        plat_name: manylinux_2_5_x86_64.manylinux1_x86_64
         force_plat: false
         use_auditwheel: true
     ci/linux-3.6:i686:
@@ -60,7 +60,7 @@ images:
             - /opt/python/cp36-cp36m/bin/python
         py_abi_tags:
             - cp36-cp36m
-        plat_name: manylinux1_i686
+        plat_name: manylinux_2_5_i686.manylinux1_i686
         force_plat: false
         use_auditwheel: true
     ci/linux-3.7:x86_64:
@@ -71,7 +71,7 @@ images:
             - /opt/python/cp37-cp37m/bin/python
         py_abi_tags:
             - cp37-cp37m
-        plat_name: manylinux1_x86_64
+        plat_name: manylinux_2_5_x86_64.manylinux1_x86_64
         force_plat: false
         use_auditwheel: true
     ci/linux-3.7:i686:
@@ -82,7 +82,7 @@ images:
             - /opt/python/cp37-cp37m/bin/python
         py_abi_tags:
             - cp37-cp37m
-        plat_name: manylinux1_i686
+        plat_name: manylinux_2_5_i686.manylinux1_i686
         force_plat: false
         use_auditwheel: true
     ci/linux-3.8:x86_64:
@@ -93,7 +93,7 @@ images:
             - /opt/python/cp38-cp38/bin/python
         py_abi_tags:
             - cp38-cp38
-        plat_name: manylinux1_x86_64
+        plat_name: manylinux_2_5_x86_64.manylinux1_x86_64
         force_plat: false
         use_auditwheel: true
     ci/linux-3.8:i686:
@@ -104,7 +104,7 @@ images:
             - /opt/python/cp38-cp38/bin/python
         py_abi_tags:
             - cp38-cp38
-        plat_name: manylinux1_i686
+        plat_name: manylinux_2_5_i686.manylinux1_i686
         force_plat: false
         use_auditwheel: true
     ci/linux-3.9:x86_64:
@@ -115,7 +115,7 @@ images:
             - /opt/python/cp39-cp39/bin/python
         py_abi_tags:
             - cp39-cp39
-        plat_name: manylinux1_x86_64
+        plat_name: manylinux_2_5_x86_64.manylinux1_x86_64
         force_plat: false
         use_auditwheel: true
     ci/linux-3.9:i686:
@@ -126,7 +126,7 @@ images:
             - /opt/python/cp39-cp39/bin/python
         py_abi_tags:
             - cp39-cp39
-        plat_name: manylinux1_i686
+        plat_name: manylinux_2_5_i686.manylinux1_i686
         force_plat: false
         use_auditwheel: true
     ci/osx-3.6:
