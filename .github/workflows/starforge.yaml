@@ -20,10 +20,10 @@ jobs:
         wheel_builder_type: [c-extension]
         include:
         - os: ubuntu-latest
-          python: 3.6
+          python-version: 3.6
           wheel_builder_type: purepy
         - os: ubuntu-latest
-          python: 3.6
+          python-version: 3.6
           wheel_builder_type: universal
     steps:
     - uses: actions/checkout@v2
