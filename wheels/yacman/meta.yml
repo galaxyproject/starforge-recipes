@@ -1,0 +1,7 @@
+---
+# yacman uses the `use_2to3=True` option of `setup()`, for which Setuptools has
+# removed support in v58.0.0
+name: yacman
+version: 0.6.7
+type: wheel
+purepy: true
