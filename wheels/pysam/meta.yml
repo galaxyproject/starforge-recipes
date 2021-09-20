@@ -5,4 +5,10 @@ version: 0.16.0.1
 type: wheel
 purepy: false
 insert_setuptools: true
-imageset: cext-osx-wheel
+imageset: cext-linux39-wheel
+apt:
+  - libbz2-dev
+yum:
+  - bzip2-devel
+setup_requires:
+  - setuptools <58  # setuptools 58 removed support for use_2to3 in setup()
