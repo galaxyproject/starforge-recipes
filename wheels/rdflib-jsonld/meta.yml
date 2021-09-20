@@ -2,5 +2,5 @@
 # rdflib-jsonld uses the `use_2to3=True` option of `setup()`, for which Setuptools has
 # removed support in v58.0.0
 name: rdflib-jsonld
-version: 0.5.0
+version: 0.4.0
 type: wheel
