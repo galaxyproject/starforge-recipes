@@ -1,0 +1,7 @@
+---
+# refgenconf uses the `use_2to3=True` option of `setup()`, for which Setuptools has
+# removed support in v58.0.0
+name: refgenconf
+version: 0.7.0
+type: wheel
+purepy: true
