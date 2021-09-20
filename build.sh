@@ -79,7 +79,9 @@ function run_build() {
     for meta in "${BUILD_WHEEL_METAS[@]}"; do
         _f=${meta#wheels/} ; wheel=${_f%%/*}
         echo "Building '$wheel' wheel from config: $meta"
+        set +e
         $STARFORGE_CMD --debug wheel --wheels-config="$meta" --wheel-dir=wheelhouse $STARFORGE_IMAGE_ARGS "$wheel"; STARFORGE_EXIT_CODE=$?
+        set -e
         if [ "$STARFORGE_EXIT_CODE" -eq 0 ]; then
             echo "Testing '$wheel' wheel"
             $STARFORGE_CMD --debug test_wheel --wheels-config="$meta" --wheel-dir=wheelhouse $STARFORGE_IMAGE_ARGS "$wheel" || exit $?
@@ -87,7 +89,8 @@ function run_build() {
             echo "Building '$wheel' wheel failed"
             exit 1
         else
-            # why do we not just use -ne 0? what is the significance of this?
+            # This can happen if the meta.yaml file declares an imageset that
+            # doesn't contain the image specified in $STARFORGE_IMAGE_ARGS
             echo "\`starforge wheel\` exited with code '$STARFORGE_EXIT_CODE', skipping wheel test"
         fi
     done
