@@ -1,0 +1,6 @@
+---
+# attmap uses the `use_2to3=True` option of `setup()`, for which Setuptools has
+# removed support in v58.0.0
+name: attmap
+version: 0.12.11
+type: wheel
