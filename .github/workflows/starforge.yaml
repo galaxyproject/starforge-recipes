@@ -17,14 +17,14 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest]
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: [3.7, 3.8, 3.9]
         wheel_builder_type: [c-extension]
         include:
         - os: ubuntu-latest
-          python-version: 3.6
+          python-version: 3.7
           wheel_builder_type: purepy
         - os: ubuntu-latest
-          python-version: 3.6
+          python-version: 3.7
           wheel_builder_type: universal
     steps:
     - uses: actions/checkout@v2
