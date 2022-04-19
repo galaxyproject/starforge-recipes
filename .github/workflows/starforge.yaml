@@ -4,7 +4,6 @@ env:
   STARFORGE: "git+https://github.com/galaxyproject/starforge#egg=starforge"
   STARFORGE_CMD: "starforge --config-file=starforge.yml"
   S3PYPI: "s3pypi"
-  S3PYPI_ROOT_INDEX: "git+https://github.com/natefoo/s3pypi-root-index#egg=s3pypi-root-index"
   WHEEL_BUILDER_TYPE: "c-extension"
   DELOCATE: "git+https://github.com/natefoo/delocate@top-level-fix-squash#egg=delocate"
   S3_REGION: "us-east-2"
@@ -74,7 +73,7 @@ jobs:
     - name: Setup deploy environment
       #if: ${{ steps.wheelhouse.outputs.exists }}
       # Not using || here because it would mask venv/pip failures
-      run: 'if [ -d "wheelhouse/" ]; then python3 -m venv ./venv && ./venv/bin/pip install "$S3PYPI" "$S3PYPI_ROOT_INDEX"; else echo "No wheels to deploy"; fi'
+      run: 'if [ -d "wheelhouse/" ]; then python3 -m venv ./venv && ./venv/bin/pip install "$S3PYPI"; else echo "No wheels to deploy"; fi'
     - name: Deploy wheels
       if: ${{ steps.wheelhouse.outputs.exists }}
       run: 'if [ -d "wheelhouse/" ]; then ./venv/bin/s3pypi ./wheelhouse/* --bucket "$S3_BUCKET" --region "$S3_REGION" --put-root-index --force; else echo "No wheels to deploy"; fi'
