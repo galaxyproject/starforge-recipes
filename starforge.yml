@@ -2,70 +2,52 @@
 
 imagesets:
     universal-wheel:
-        - ci/linux-3.6:universal
+        - ci/linux-3.7:universal
     purepy-wheel:
-        - ci/linux-3.6:purepy
+        - ci/linux-3.7:purepy
     purepy3-wheel:
-        - ci/linux-3.6:purepy
+        - ci/linux-3.7:purepy
     cext-osx-wheel:
-        - ci/osx-3.6
         - ci/osx-3.7
         - ci/osx-3.8
         - ci/osx-3.9
+        - ci/osx-3.10
+    cext-linux310-wheel:
+        - ci/linux-3.10:x86_64
+        - ci/linux-3.10:i686
     cext-linux39-wheel:
         - ci/linux-3.9:x86_64
         - ci/linux-3.9:i686
     default-wheel:
-        - ci/linux-3.6:x86_64
-        - ci/linux-3.6:i686
         - ci/linux-3.7:x86_64
         - ci/linux-3.7:i686
         - ci/linux-3.8:x86_64
         - ci/linux-3.8:i686
         - ci/linux-3.9:x86_64
         - ci/linux-3.9:i686
+        - ci/linux-3.10:x86_64
+        - ci/linux-3.10:i686
         - ci/osx-3.6
         - ci/osx-3.7
         - ci/osx-3.8
         - ci/osx-3.9
+        - ci/osx-3.10
 
 images:
-    ci/linux-3.6:universal:
+    ci/linux-3.7:universal:
         type: local
         pkgtool: yum
         pythons:
             - python  # from $PATH = buildpy
         plat_name: any
         force_plat: false
-    ci/linux-3.6:purepy:
+    ci/linux-3.7:purepy:
         type: local
         pkgtool: yum
         pythons:
             - python  # from $PATH = buildpy
         plat_name: any
         force_plat: false
-    ci/linux-3.6:x86_64:
-        image: manylinux1:x86_64
-        pkgtool: yum
-        buildpy: /opt/wheelenv/bin/python
-        pythons:
-            - /opt/python/cp36-cp36m/bin/python
-        py_abi_tags:
-            - cp36-cp36m
-        plat_name: manylinux_2_5_x86_64.manylinux1_x86_64
-        force_plat: false
-        use_auditwheel: true
-    ci/linux-3.6:i686:
-        image: manylinux1:i686
-        pkgtool: yum
-        buildpy: /opt/wheelenv/bin/python
-        pythons:
-            - /opt/python/cp36-cp36m/bin/python
-        py_abi_tags:
-            - cp36-cp36m
-        plat_name: manylinux_2_5_i686.manylinux1_i686
-        force_plat: false
-        use_auditwheel: true
     ci/linux-3.7:x86_64:
         image: manylinux1:x86_64
         pkgtool: yum
@@ -132,18 +114,28 @@ images:
         plat_name: manylinux_2_5_i686.manylinux1_i686
         force_plat: false
         use_auditwheel: true
-    ci/osx-3.6:
-        type: local
-        pkgtool: brew
-        #buildpy: python  # from $PATH
+    ci/linux-3.10:x86_64:
+        image: manylinux1:x86_64
+        pkgtool: yum
+        buildpy: /opt/wheelenv/bin/python
         pythons:
-            - python  # from $PATH = buildpy
+            - /opt/python/cp310-cp310/bin/python
         py_abi_tags:
-            - cp36-cp36m
-        buildenv:
-            MACOSX_DEPLOYMENT_TARGET: 10.14
-        plat_name: macosx_10_14_x86_64
-        use_delocate: true
+            - cp310-cp310
+        plat_name: manylinux_2_5_x86_64.manylinux1_x86_64
+        force_plat: false
+        use_auditwheel: true
+    ci/linux-3.10:i686:
+        image: manylinux1:i686
+        pkgtool: yum
+        buildpy: /opt/wheelenv/bin/python
+        pythons:
+            - /opt/python/cp310-cp310/bin/python
+        py_abi_tags:
+            - cp310-cp310
+        plat_name: manylinux_2_5_i686.manylinux1_i686
+        force_plat: false
+        use_auditwheel: true
     ci/osx-3.7:
         type: local
         pkgtool: brew
@@ -153,8 +145,8 @@ images:
         py_abi_tags:
             - cp37-cp37m
         buildenv:
-            MACOSX_DEPLOYMENT_TARGET: 10.15
-        plat_name: macosx_10_15_x86_64
+            MACOSX_DEPLOYMENT_TARGET: 10.14
+        plat_name: macosx_10_14_x86_64
         use_delocate: true
     ci/osx-3.8:
         type: local
@@ -176,6 +168,18 @@ images:
             - python  # from $PATH = buildpy
         py_abi_tags:
             - cp39-cp39
+        buildenv:
+            MACOSX_DEPLOYMENT_TARGET: 10.15
+        plat_name: macosx_10_15_x86_64
+        use_delocate: true
+    ci/osx-3.10:
+        type: local
+        pkgtool: brew
+        #buildpy: python  # from $PATH
+        pythons:
+            - python  # from $PATH = buildpy
+        py_abi_tags:
+            - cp310-cp310
         buildenv:
             MACOSX_DEPLOYMENT_TARGET: 10.14
         plat_name: macosx_10_14_x86_64
