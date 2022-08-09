@@ -1,11 +1,10 @@
 ---
 
 name: pysam
-version: 0.16.0.1
+version: 0.19.1
 type: wheel
 purepy: false
 insert_setuptools: true
-imageset: cext-linux39-wheel
 apt:
   - libbz2-dev
 yum:
