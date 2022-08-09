@@ -52,7 +52,7 @@ function run_build() {
             Linux)
                 STARFORGE_IMAGE_ARGS="--image=ci/linux-${PY}:x86_64 --image=ci/linux-${PY}:i686"
                 for arch in x86_64 i686; do
-                    image=quay.io/pypa/manylinux1_$arch
+                    image=quay.io/pypa/manylinux2014_$arch
                     docker pull $image
                     case $arch in
                         i686)
@@ -68,7 +68,7 @@ function run_build() {
                         -e "s%ENTRYPOINT%${entrypoint}%g" .ci/Dockerfile > .ci/Dockerfile.$arch
                     echo ".ci/Dockerfile.$arch contains:"
                     cat .ci/Dockerfile.$arch
-                    docker build -t manylinux1:$arch -f .ci/Dockerfile.$arch .
+                    docker build -t manylinux2010:$arch -f .ci/Dockerfile.$arch .
                 done
                 ;;
         esac

@@ -48,91 +48,91 @@ images:
         plat_name: any
         force_plat: false
     ci/linux-3.7:x86_64:
-        image: manylinux1:x86_64
+        image: manylinux2010:x86_64
         pkgtool: yum
         buildpy: /opt/wheelenv/bin/python
         pythons:
             - /opt/python/cp37-cp37m/bin/python
         py_abi_tags:
             - cp37-cp37m
-        plat_name: manylinux_2_12_x86_64.manylinux1_x86_64
+        plat_name: manylinux_2_12_x86_64.manylinux2010_x86_64
         force_plat: false
         use_auditwheel: true
     ci/linux-3.7:i686:
-        image: manylinux1:i686
+        image: manylinux2010:i686
         pkgtool: yum
         buildpy: /opt/wheelenv/bin/python
         pythons:
             - /opt/python/cp37-cp37m/bin/python
         py_abi_tags:
             - cp37-cp37m
-        plat_name: manylinux_2_12_i686.manylinux1_i686
+        plat_name: manylinux_2_12_i686.manylinux2010_i686
         force_plat: false
         use_auditwheel: true
     ci/linux-3.8:x86_64:
-        image: manylinux1:x86_64
+        image: manylinux2010:x86_64
         pkgtool: yum
         buildpy: /opt/wheelenv/bin/python
         pythons:
             - /opt/python/cp38-cp38/bin/python
         py_abi_tags:
             - cp38-cp38
-        plat_name: manylinux_2_12_x86_64.manylinux1_x86_64
+        plat_name: manylinux_2_12_x86_64.manylinux2010_x86_64
         force_plat: false
         use_auditwheel: true
     ci/linux-3.8:i686:
-        image: manylinux1:i686
+        image: manylinux2010:i686
         pkgtool: yum
         buildpy: /opt/wheelenv/bin/python
         pythons:
             - /opt/python/cp38-cp38/bin/python
         py_abi_tags:
             - cp38-cp38
-        plat_name: manylinux_2_12_i686.manylinux1_i686
+        plat_name: manylinux_2_12_i686.manylinux2010_i686
         force_plat: false
         use_auditwheel: true
     ci/linux-3.9:x86_64:
-        image: manylinux1:x86_64
+        image: manylinux2010:x86_64
         pkgtool: yum
         buildpy: /opt/wheelenv/bin/python
         pythons:
             - /opt/python/cp39-cp39/bin/python
         py_abi_tags:
             - cp39-cp39
-        plat_name: manylinux_2_12_x86_64.manylinux1_x86_64
+        plat_name: manylinux_2_12_x86_64.manylinux2010_x86_64
         force_plat: false
         use_auditwheel: true
     ci/linux-3.9:i686:
-        image: manylinux1:i686
+        image: manylinux2010:i686
         pkgtool: yum
         buildpy: /opt/wheelenv/bin/python
         pythons:
             - /opt/python/cp39-cp39/bin/python
         py_abi_tags:
             - cp39-cp39
-        plat_name: manylinux_2_12_i686.manylinux1_i686
+        plat_name: manylinux_2_12_i686.manylinux2010_i686
         force_plat: false
         use_auditwheel: true
     ci/linux-3.10:x86_64:
-        image: manylinux1:x86_64
+        image: manylinux2010:x86_64
         pkgtool: yum
         buildpy: /opt/wheelenv/bin/python
         pythons:
             - /opt/python/cp310-cp310/bin/python
         py_abi_tags:
             - cp310-cp310
-        plat_name: manylinux_2_12_x86_64.manylinux1_x86_64
+        plat_name: manylinux_2_12_x86_64.manylinux2010_x86_64
         force_plat: false
         use_auditwheel: true
     ci/linux-3.10:i686:
-        image: manylinux1:i686
+        image: manylinux2010:i686
         pkgtool: yum
         buildpy: /opt/wheelenv/bin/python
         pythons:
             - /opt/python/cp310-cp310/bin/python
         py_abi_tags:
             - cp310-cp310
-        plat_name: manylinux_2_12_i686.manylinux1_i686
+        plat_name: manylinux_2_12_i686.manylinux2010_i686
         force_plat: false
         use_auditwheel: true
     ci/osx-3.7:
