@@ -153,8 +153,8 @@ images:
         py_abi_tags:
             - cp37-cp37m
         buildenv:
-            MACOSX_DEPLOYMENT_TARGET: 10.14
-        plat_name: macosx_10_14_x86_64
+            MACOSX_DEPLOYMENT_TARGET: 10.15
+        plat_name: macosx_10_15_x86_64
         use_delocate: true
     ci/osx-3.8:
         type: local
@@ -165,8 +165,8 @@ images:
         py_abi_tags:
             - cp38-cp38
         buildenv:
-            MACOSX_DEPLOYMENT_TARGET: 10.14
-        plat_name: macosx_10_14_x86_64
+            MACOSX_DEPLOYMENT_TARGET: 10.15
+        plat_name: macosx_10_15_x86_64
         use_delocate: true
     ci/osx-3.9:
         type: local
